@@ -1,0 +1,23 @@
+# Nix / direnv
+result
+result-*
+.direnv/
+
+# Node
+node_modules/
+
+# Next.js
+.next/
+out/
+build/
+
+# Vercel
+.vercel/
+
+# Env — NEVER commit secrets (DATABASE_URL, AUTH_SECRET, ADMIN_PASSWORD, …)
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
