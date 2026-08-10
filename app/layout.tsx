@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${archivo.variable} ${hanken.variable}`}>
       <body className="bg-background font-body text-on-background antialiased min-h-screen">
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
           <Sidebar />
           <div className="pt-16 lg:pt-0 lg:ml-[248px] min-h-screen flex flex-col">
             <main className="flex-1">{children}</main>
