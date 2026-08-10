@@ -2,6 +2,7 @@
  * Seed the Neon database from db/seed-data.ts. Run with `npm run db:seed`
  * (requires DATABASE_URL). Idempotent: clears then re-inserts the sample rows.
  */
+import "dotenv/config";
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 import { projects, publications, news } from "./schema";
