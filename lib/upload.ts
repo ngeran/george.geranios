@@ -12,7 +12,14 @@ export const MAX_MB = 5;
 export const ACCEPT_ATTR = ".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp";
 
 /** Visible hint shown under every uploader. */
-export const UPLOAD_NOTE = `JPEG, PNG, or WebP · up to ${MAX_MB} MB · recommended ≥ 1600px on the longest side.`;
+export const UPLOAD_NOTE = `JPEG, PNG, or WebP · up to ${MAX_MB} MB.`;
+
+/** Performance tip shown under every uploader. */
+export const UPLOAD_RECOMMENDATION =
+  "Best site performance: export as WebP and resize to ~2000px on the longest side before uploading.";
+
+/** Default cap on the number of gallery images per item. */
+export const MAX_GALLERY_IMAGES = 12;
 
 /**
  * Client-side pre-check on a File (before POSTing). Returns an error message or

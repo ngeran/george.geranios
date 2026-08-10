@@ -105,7 +105,7 @@ export function Catalogue({
             key={i.href}
             className="group py-6 md:py-8 grid grid-cols-[6rem_1fr] md:grid-cols-12 gap-gutter items-center w-full hover:bg-surface-container transition-colors duration-300"
           >
-            <div className="hidden md:block md:col-span-1 font-display text-label-caps text-on-surface-variant opacity-50">
+            <div className="hidden md:block md:col-span-2 font-display text-label-caps text-on-surface-variant opacity-50 whitespace-nowrap">
               {i.ref ? `#${i.ref}` : "—"}
             </div>
             <div className="md:col-span-2">
@@ -126,7 +126,7 @@ export function Catalogue({
               )}
             </div>
             <div className="md:col-span-4 min-w-0">
-              <div className="font-display text-[10px] text-on-surface-variant uppercase mb-1 md:hidden">
+              <div className="font-display text-[10px] text-on-surface-variant uppercase mb-1 md:hidden whitespace-nowrap">
                 Ref: {i.ref ? `#${i.ref}` : "—"}
               </div>
               <h3 className="font-display text-headline-md text-primary uppercase">
@@ -148,8 +148,8 @@ export function Catalogue({
                 {i.line2 && <span>{i.line2}</span>}
               </div>
             </div>
-            <div className="hidden md:block md:col-span-2">
-              <span className="font-display text-label-caps text-primary">
+            <div className="hidden md:block md:col-span-1">
+              <span className="font-display text-label-caps text-primary whitespace-nowrap">
                 {i.year ?? "—"}
               </span>
             </div>

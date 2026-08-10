@@ -49,7 +49,12 @@ export function NewsForm({
       </Section>
 
       <Section title="Image">
-        <ImageInput name="image" label="Image (optional)" defaultValue={defaults?.image ?? ""} />
+        <ImageInput
+          name="image"
+          label="Image (optional)"
+          defaultValue={defaults?.image ?? ""}
+          note="Shown at the top of the article and in the news list."
+        />
       </Section>
 
       <Section title="Body" description="Separate paragraphs with a blank line.">

@@ -53,7 +53,7 @@ export function ProjectForm({
         <Field label="Slug" hint="Leave blank to auto-generate from the title.">
           <Input name="slug" defaultValue={defaults?.slug ?? ""} placeholder="the-grid" />
         </Field>
-        <div className="grid grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
           <Field label="Year">
             <Input name="year" type="number" defaultValue={defaults?.year ?? ""} />
           </Field>
@@ -64,7 +64,7 @@ export function ProjectForm({
       </Section>
 
       <Section title="Classification">
-        <div className="grid grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
           <Field label="Category">
             <Input name="category" defaultValue={defaults?.category ?? ""} />
           </Field>
@@ -81,7 +81,7 @@ export function ProjectForm({
         <Field label="Location">
           <Input name="location" defaultValue={defaults?.location ?? ""} />
         </Field>
-        <div className="grid grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
           <Field label="Medium">
             <Input name="medium" defaultValue={defaults?.medium ?? ""} />
           </Field>
@@ -95,7 +95,7 @@ export function ProjectForm({
       </Section>
 
       <Section title="Display & availability">
-        <div className="grid grid-cols-2 gap-gutter items-end">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter items-end">
           <Field label="Availability">
             <select
               name="availability"
@@ -125,8 +125,18 @@ export function ProjectForm({
       </Section>
 
       <Section title="Images">
-        <ImageInput name="image" label="Cover image" defaultValue={defaults?.image ?? ""} />
-        <GalleryInput name="gallery" label="Gallery images" defaultValue={defaults?.gallery ?? []} />
+        <ImageInput
+          name="image"
+          label="Cover image"
+          defaultValue={defaults?.image ?? ""}
+          note="Shown on the home page when the project is marked Featured, and as the main image on the project page."
+        />
+        <GalleryInput
+          name="gallery"
+          label="Gallery images"
+          defaultValue={defaults?.gallery ?? []}
+          note="Extra photos shown in the project's lightbox."
+        />
       </Section>
 
       <Section title="Description" description="Separate paragraphs with a blank line.">

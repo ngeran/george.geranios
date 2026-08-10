@@ -31,7 +31,7 @@ export function SiteContentForm({
         <Field label="Studio email">
           <Input name="contactEmail" type="email" defaultValue={defaults.contactEmail ?? ""} />
         </Field>
-        <div className="grid grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
           <Field label="Instagram handle">
             <Input
               name="contactInstagramHandle"
@@ -52,6 +52,7 @@ export function SiteContentForm({
           name="aboutPortrait"
           label="Portrait image"
           defaultValue={defaults.aboutPortrait ?? ""}
+          note="Shown at the top of the Biography page."
         />
         <Field label="Bio" hint="Separate paragraphs with a blank line.">
           <Textarea name="aboutBio" rows={8} defaultValue={defaults.aboutBio ?? ""} />

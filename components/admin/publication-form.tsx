@@ -50,7 +50,7 @@ export function PublicationForm({
         <Field label="Slug" hint="Leave blank to auto-generate from the title.">
           <Input name="slug" defaultValue={defaults?.slug ?? ""} placeholder="catalogue-raisonne" />
         </Field>
-        <div className="grid grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
           <Field label="Year">
             <Input name="year" type="number" defaultValue={defaults?.year ?? ""} />
           </Field>
@@ -61,7 +61,7 @@ export function PublicationForm({
       </Section>
 
       <Section title="Publication details">
-        <div className="grid grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
           <Field label="Publisher">
             <Input name="publisher" defaultValue={defaults?.publisher ?? ""} />
           </Field>
@@ -69,7 +69,7 @@ export function PublicationForm({
             <Input name="author" defaultValue={defaults?.author ?? ""} />
           </Field>
         </div>
-        <div className="grid grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
           <Field label="ISBN">
             <Input name="isbn" defaultValue={defaults?.isbn ?? ""} />
           </Field>
@@ -77,7 +77,7 @@ export function PublicationForm({
             <Input name="pages" defaultValue={defaults?.pages ?? ""} />
           </Field>
         </div>
-        <div className="grid grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
           <Field label="Format">
             <Input name="format" defaultValue={defaults?.format ?? ""} />
           </Field>
@@ -85,7 +85,7 @@ export function PublicationForm({
             <Input name="edition" defaultValue={defaults?.edition ?? ""} />
           </Field>
         </div>
-        <div className="grid grid-cols-2 gap-gutter">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
           <Field label="Reference">
             <Input name="ref" defaultValue={defaults?.ref ?? ""} />
           </Field>
@@ -96,8 +96,18 @@ export function PublicationForm({
       </Section>
 
       <Section title="Images">
-        <ImageInput name="image" label="Cover image" defaultValue={defaults?.image ?? ""} />
-        <GalleryInput name="gallery" label="Gallery images" defaultValue={defaults?.gallery ?? []} />
+        <ImageInput
+          name="image"
+          label="Cover image"
+          defaultValue={defaults?.image ?? ""}
+          note="Shown on the publication page and in the publications list."
+        />
+        <GalleryInput
+          name="gallery"
+          label="Gallery images"
+          defaultValue={defaults?.gallery ?? []}
+          note="Extra pages and spreads shown in the publication lightbox."
+        />
       </Section>
 
       <Section title="Description" description="Separate paragraphs with a blank line.">
