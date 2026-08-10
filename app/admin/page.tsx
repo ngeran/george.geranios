@@ -1,14 +1,17 @@
 import Link from "next/link";
 import { getProjects, getPublications, getNews } from "@/lib/data";
+import { getBlobUsage } from "@/lib/blob";
 import { AdminHeader } from "@/components/admin/admin-header";
+import { StorageMeter } from "@/components/admin/storage-meter";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
-  const [projects, publications, news] = await Promise.all([
+  const [projects, publications, news, usage] = await Promise.all([
     getProjects(),
     getPublications(),
     getNews(),
+    getBlobUsage(),
   ]);
 
   const cards = [
@@ -21,6 +24,9 @@ export default async function AdminDashboard() {
     <div className="px-edge-margin-mobile lg:px-edge-margin-desktop py-gutter">
       <div className="max-w-[1100px] mx-auto">
         <AdminHeader title="Dashboard" />
+        <div className="mb-section-gap">
+          <StorageMeter usage={usage} />
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-gutter">
           {cards.map((c) => (
             <Link

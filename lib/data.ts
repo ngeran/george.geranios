@@ -1,16 +1,18 @@
 import { desc, eq } from "drizzle-orm";
-import { projects, publications, news } from "@/db/schema";
+import { projects, publications, news, siteContent } from "@/db/schema";
 import { db } from "@/lib/db";
 import {
   seedProjects,
   seedPublications,
   seedNews,
+  seedSiteContent,
   type Project,
   type Publication,
   type NewsItem,
+  type SiteContent,
 } from "@/db/seed-data";
 
-export type { Project, Publication, NewsItem };
+export type { Project, Publication, NewsItem, SiteContent };
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const asProject = (r: any): Project => ({
@@ -153,4 +155,56 @@ export async function getNewsItem(slug: string): Promise<NewsItem | null> {
     const rows = await db!.select().from(news).where(eq(news.slug, slug)).limit(1);
     return rows[0] ? asNews(rows[0]) : null;
   }, seedNews.find((n) => n.slug === slug) ?? null);
+}
+
+// ── Site content (singleton) ─────────────────────────────────────────────
+const asSiteContent = (r: typeof siteContent.$inferSelect): SiteContent => ({
+  contactEmail: r.contactEmail ?? seedSiteContent.contactEmail,
+  contactInstagramUrl: r.contactInstagramUrl ?? seedSiteContent.contactInstagramUrl,
+  contactInstagramHandle: r.contactInstagramHandle ?? seedSiteContent.contactInstagramHandle,
+  contactIntro: r.contactIntro ?? seedSiteContent.contactIntro,
+  aboutPortrait: r.aboutPortrait ?? seedSiteContent.aboutPortrait,
+  aboutBio: r.aboutBio ?? seedSiteContent.aboutBio,
+  aboutExhibitions: r.aboutExhibitions ?? seedSiteContent.aboutExhibitions,
+  availableHeading: r.availableHeading ?? seedSiteContent.availableHeading,
+  availableIntro: r.availableIntro ?? seedSiteContent.availableIntro,
+  heroTitle: r.heroTitle ?? null,
+  heroSubtitle: r.heroSubtitle ?? null,
+});
+
+export async function getSiteContent(): Promise<SiteContent> {
+  return readOrSeed(
+    "getSiteContent",
+    async () => {
+      const rows = await db!.select().from(siteContent).where(eq(siteContent.id, 1)).limit(1);
+      return rows[0] ? asSiteContent(rows[0]) : seedSiteContent;
+    },
+    seedSiteContent,
+  );
+}
+
+/**
+ * Every image URL currently referenced somewhere in the content (project covers
+ * + galleries, publication covers + galleries, news images, the bio portrait).
+ * Used by /admin/media to tell which uploaded blobs are "in use" vs orphaned.
+ */
+export async function getReferencedImageUrls(): Promise<Set<string>> {
+  const [ps, pubs, ns, site] = await Promise.all([
+    getProjects(),
+    getPublications(),
+    getNews(),
+    getSiteContent(),
+  ]);
+  const urls = new Set<string>();
+  for (const p of ps) {
+    if (p.image) urls.add(p.image);
+    for (const g of p.gallery) urls.add(g);
+  }
+  for (const p of pubs) {
+    if (p.image) urls.add(p.image);
+    for (const g of p.gallery) urls.add(g);
+  }
+  for (const n of ns) if (n.image) urls.add(n.image);
+  if (site.aboutPortrait) urls.add(site.aboutPortrait);
+  return urls;
 }

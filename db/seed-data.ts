@@ -192,3 +192,37 @@ export const seedNews: NewsItem[] = [
     body: "Removing the human element from the frame to reveal the skeletal truth of our environments. A study on void space and atmospheric neutrality.\n\nThe gallery void becomes its own subject: a space so emptied of incident that the architecture itself must carry the entire weight of meaning.",
   },
 ];
+
+export type SiteContent = {
+  contactEmail: string | null;
+  contactInstagramUrl: string | null;
+  contactInstagramHandle: string | null;
+  contactIntro: string | null;
+  aboutPortrait: string | null;
+  aboutBio: string | null;
+  aboutExhibitions: string | null;
+  availableHeading: string | null;
+  availableIntro: string | null;
+  heroTitle: string | null;
+  heroSubtitle: string | null;
+};
+
+/** Default site-wide content. Mirrors the previously-hardcoded page literals so
+ *  the no-DB site renders identically. */
+export const seedSiteContent: SiteContent = {
+  contactEmail: "studio@example.com",
+  contactInstagramUrl: "https://instagram.com/",
+  contactInstagramHandle: "@georgegeranios",
+  contactIntro: "For print sales, exhibition requests, and press enquiries.",
+  aboutPortrait:
+    "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=1200&q=80&fit=crop",
+  aboutBio:
+    "Based in Düsseldorf, the photographer has spent three decades documenting the systems and structures that define the contemporary landscape — from stock exchanges and factory floors to solar fields and emptied galleries.\n\nThe work is characterised by an extreme distance: a vantage point high enough that the individual dissolves into pattern, and the scale of human activity becomes legible only as geometry.",
+  aboutExhibitions:
+    "2023 — Kunstmuseum, Basel\n2021 — Hayward Gallery, London\n2019 — Museum of Modern Art, New York",
+  availableHeading: "Available Works",
+  availableIntro:
+    "For pricing, provenance, and condition reports, please contact the studio directly.",
+  heroTitle: null,
+  heroSubtitle: null,
+};

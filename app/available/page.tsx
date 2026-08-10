@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { getAvailableProjects } from "@/lib/data";
+import { getAvailableProjects, getSiteContent } from "@/lib/data";
 import { Catalogue, type CatalogueItem } from "@/components/catalogue";
 
 export const revalidate = 60;
 export const metadata: Metadata = { title: "Available Works" };
 
 export default async function AvailablePage() {
-  const projects = await getAvailableProjects();
+  const [projects, site] = await Promise.all([getAvailableProjects(), getSiteContent()]);
   const items: CatalogueItem[] = projects.map((p) => ({
     href: `/projects/${p.slug}`,
     ref: p.ref,
@@ -27,17 +27,18 @@ export default async function AvailablePage() {
             AVAILABLE WORKS / FOR SALE
           </span>
           <h1 className="font-display text-display-xl-mobile lg:text-display-xl uppercase leading-none">
-            Available Works
+            {site.availableHeading || "Available Works"}
           </h1>
         </div>
       </section>
       <section className="px-edge-margin-mobile lg:px-edge-margin-desktop py-section-gap bg-background">
         <div className="max-w-[1440px] mx-auto">
           <Catalogue items={items} noun="Works" />
-          <p className="mt-section-gap font-body text-caption text-on-surface-variant max-w-md text-center mx-auto">
-            For pricing, provenance, and condition reports, please contact the
-            studio directly.
-          </p>
+          {site.availableIntro && (
+            <p className="mt-section-gap font-body text-caption text-on-surface-variant max-w-md text-center mx-auto">
+              {site.availableIntro}
+            </p>
+          )}
         </div>
       </section>
     </>

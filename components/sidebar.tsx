@@ -13,7 +13,13 @@ const NAV = [
   { href: "/contact", label: "Contact" },
 ];
 
-export function Sidebar() {
+export function Sidebar({
+  contactEmail,
+  contactInstagramUrl,
+}: {
+  contactEmail: string | null;
+  contactInstagramUrl: string | null;
+}) {
   const path = usePathname();
   const isActive = (href: string) =>
     path === href || (!!path && path !== "/" && path.startsWith(href));
@@ -50,24 +56,30 @@ export function Sidebar() {
       </nav>
 
       {/* Contact — bottom (desktop only) */}
-      <div className="hidden lg:block px-gutter lg:mt-auto lg:pb-gutter">
-        <div className="border-t border-structural-gray pt-gutter space-y-1">
-          <a
-            href="mailto:studio@example.com"
-            className="block font-body text-caption text-on-surface-variant hover:text-primary"
-          >
-            studio@example.com
-          </a>
-          <a
-            href="https://instagram.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block font-body text-caption text-on-surface-variant hover:text-primary"
-          >
-            Instagram
-          </a>
+      {(contactEmail || contactInstagramUrl) && (
+        <div className="hidden lg:block px-gutter lg:mt-auto lg:pb-gutter">
+          <div className="border-t border-structural-gray pt-gutter space-y-1">
+            {contactEmail && (
+              <a
+                href={`mailto:${contactEmail}`}
+                className="block font-body text-caption text-on-surface-variant hover:text-primary"
+              >
+                {contactEmail}
+              </a>
+            )}
+            {contactInstagramUrl && (
+              <a
+                href={contactInstagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block font-body text-caption text-on-surface-variant hover:text-primary"
+              >
+                Instagram
+              </a>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </aside>
   );
 }

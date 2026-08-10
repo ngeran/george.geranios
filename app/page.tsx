@@ -1,10 +1,13 @@
 import { HomeHero } from "@/components/home-hero";
-import { getFeaturedProjects } from "@/lib/data";
+import { getFeaturedProjects, getSiteContent } from "@/lib/data";
 
 export const revalidate = 60;
 
 export default async function Home() {
-  const featured = await getFeaturedProjects();
+  const [featured, site] = await Promise.all([
+    getFeaturedProjects(),
+    getSiteContent(),
+  ]);
   const projects = featured
     .filter((p) => p.image)
     .map((p) => ({
@@ -14,5 +17,11 @@ export default async function Home() {
       image: p.image as string,
     }));
 
-  return <HomeHero projects={projects} />;
+  return (
+    <HomeHero
+      projects={projects}
+      heroTitle={site.heroTitle}
+      heroSubtitle={site.heroSubtitle}
+    />
+  );
 }

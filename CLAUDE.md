@@ -27,8 +27,8 @@ Photography portfolio + single-admin CMS. Next.js 16 App Router · React 19 · T
 
 **Data layer — the one design decision to internalize:**
 - `lib/db.ts` builds a Drizzle-over-Neon (HTTP/serverless driver) client **only when `DATABASE_URL` is non-empty**; otherwise it exports `db = null`.
-- `lib/data.ts` is the sole read surface (`getProjects`, `getNews`, …). Every function short-circuits to seed data (`db/seed-data.ts`) when `db` is null → **the public site renders fully with no database.** When adding a query, mirror this seed-fallback.
-- Schema lives in `db/schema.ts` (tables: `projects`, `publications`, `news`). Migrations are **push-based** (`drizzle-kit push`); there is no hand-edited SQL migration folder.
+- `lib/data.ts` is the sole read surface (`getProjects`, `getNews`, `getSiteContent`, …). Every function short-circuits to seed data (`db/seed-data.ts`) when `db` is null → **the public site renders fully with no database.** When adding a query, mirror this seed-fallback.
+- Schema lives in `db/schema.ts` (tables: `projects`, `publications`, `news`, plus the `site_content` singleton — single row `id=1` edited via `/admin/content` for Contact/Biography/Available/Hero text). Migrations are **push-based** (`drizzle-kit push`); there is no hand-edited SQL migration folder.
 
 **Rendering — why `next build` touches the database:**
 - Public pages are async Server Components with `export const revalidate = 60` (ISR); `[slug]` routes implement `generateStaticParams()` via the data layer.
@@ -37,7 +37,9 @@ Photography portfolio + single-admin CMS. Next.js 16 App Router · React 19 · T
 **Admin & auth:**
 - `/admin/*` is guarded by `proxy.ts` (formerly `middleware.ts` in Next 16) via a jose-signed JWT in an HttpOnly cookie (`lib/session.ts`). Single admin — no user table. Credentials are the env vars `ADMIN_EMAIL` / `ADMIN_PASSWORD`; signing key is `AUTH_SECRET`.
 - Admin pages are `force-dynamic`. Writes go through Server Actions in `app/admin/<resource>/actions.ts`, each guarded by `requireAdmin()` (`lib/admin.ts`, defense-in-depth) and ending with `revalidatePath(...)` to refresh the ISR pages.
-- Image uploads: `app/api/upload/route.ts` → Vercel Blob (`BLOB_READ_WRITE_TOKEN`). Allowed `next/image` hosts live in `next.config.ts` (`images.unsplash.com` for seed photos, `*.vercel-storage.com` for uploads).
+- Image uploads: `app/api/upload/route.ts` → Vercel Blob (`BLOB_READ_WRITE_TOKEN`). Enforced JPEG/PNG/WebP + 5 MB with magic-byte verification; shared rules live in `lib/upload.ts` (imported by both the route and the `image-input`/`gallery-input` components). Allowed `next/image` hosts live in `next.config.ts` (`images.unsplash.com` for seed photos, `*.vercel-storage.com` for uploads).
+- **Images live in Vercel Blob, not the Neon DB** (the schema stores URL strings; Neon only holds text rows). `lib/blob.ts` tracks Blob usage (`getBlobUsage`/`listBlobs`) and enforces a configurable quota (`BLOB_QUOTA_MB`, default 500) — the upload route rejects uploads that would exceed it, the dashboard shows a storage meter, and `/admin/media` lists/uploads so orphans can be deleted (`del()`). "In use" is computed by `getReferencedImageUrls()` in `lib/data.ts`.
+- Admin nav: `/admin/*` is wrapped by `app/admin/layout.tsx` → `components/admin/admin-nav.tsx` (section switcher, hidden on `/admin/login`).
 
 ## Environment
 

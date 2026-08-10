@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { ACCEPT_ATTR, UPLOAD_NOTE, validateClientFile } from "@/lib/upload";
 
 /** Multiple images, each uploaded to /api/upload. Carried as repeated hidden
  *  inputs named `name` (so formData.getAll(name) returns the URL array). */
@@ -19,20 +20,39 @@ export function GalleryInput({
 }) {
   const [urls, setUrls] = useState<string[]>(defaultValue);
   const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function addFiles(files: FileList | null) {
     if (!files || !files.length) return;
+    const picked = Array.from(files);
+    const errors: string[] = [];
+    const valid = picked.filter((f) => {
+      const bad = validateClientFile(f);
+      if (bad) errors.push(bad);
+      return !bad;
+    });
+
     setBusy(true);
     try {
+      const results = await Promise.allSettled(
+        valid.map(async (file) => {
+          const fd = new FormData();
+          fd.append("file", file);
+          const res = await fetch("/api/upload", { method: "POST", body: fd });
+          const data = await res.json().catch(() => ({}));
+          if (res.ok && data.url) return data.url as string;
+          throw new Error(data.error || "Upload failed");
+        }),
+      );
       const uploaded: string[] = [];
-      for (const file of Array.from(files)) {
-        const fd = new FormData();
-        fd.append("file", file);
-        const res = await fetch("/api/upload", { method: "POST", body: fd });
-        const data = await res.json();
-        if (data.url) uploaded.push(data.url);
+      for (const r of results) {
+        if (r.status === "fulfilled") uploaded.push(r.value);
+        else errors.push(r.reason instanceof Error ? r.reason.message : "Upload failed");
       }
-      setUrls((u) => [...u, ...uploaded]);
+      if (uploaded.length) setUrls((u) => [...u, ...uploaded]);
+      setError(
+        errors.length ? `${errors.length} of ${picked.length} rejected — ${errors[0]}` : null,
+      );
     } finally {
       setBusy(false);
     }
@@ -62,8 +82,19 @@ export function GalleryInput({
           </Button>
         </div>
       ))}
-      <Input type="file" accept="image/*" multiple onChange={(e) => addFiles(e.target.files)} disabled={busy} />
+      <Input
+        type="file"
+        accept={ACCEPT_ATTR}
+        multiple
+        onChange={(e) => {
+          addFiles(e.target.files);
+          e.target.value = "";
+        }}
+        disabled={busy}
+      />
+      <p className="text-xs text-on-surface-variant">{UPLOAD_NOTE}</p>
       {busy && <p className="text-sm text-muted-foreground">Uploading…</p>}
+      {error && <p className="text-sm text-destructive">{error}</p>}
     </div>
   );
 }

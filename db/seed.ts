@@ -5,8 +5,8 @@
 import "dotenv/config";
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
-import { projects, publications, news } from "./schema";
-import { seedProjects, seedPublications, seedNews } from "./seed-data";
+import { projects, publications, news, siteContent } from "./schema";
+import { seedProjects, seedPublications, seedNews, seedSiteContent } from "./seed-data";
 
 async function main() {
   if (!process.env.DATABASE_URL) {
@@ -25,8 +25,15 @@ async function main() {
   await db.insert(publications).values(seedPublications);
   await db.insert(news).values(seedNews);
 
+  // Site content is a singleton; only seed it if no row exists, so re-running
+  // the seed (to reset projects/news) never overwrites the admin's edits.
+  await db
+    .insert(siteContent)
+    .values({ id: 1, ...seedSiteContent })
+    .onConflictDoNothing();
+
   console.log(
-    `✓ done: ${seedProjects.length} projects, ${seedPublications.length} publications, ${seedNews.length} news.`,
+    `✓ done: ${seedProjects.length} projects, ${seedPublications.length} publications, ${seedNews.length} news, site content ready.`,
   );
 }
 

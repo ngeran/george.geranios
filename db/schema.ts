@@ -80,3 +80,23 @@ export const news = pgTable(
   },
   (t) => ({ slugIdx: uniqueIndex("news_slug_idx").on(t.slug) }),
 );
+
+/**
+ * Singleton site-wide content (single row, id = 1). Edited via /admin/content.
+ * Falls back to `seedSiteContent` in `db/seed-data.ts` when no DB / no row.
+ */
+export const siteContent = pgTable("site_content", {
+  id: integer("id").primaryKey(),
+  contactEmail: text("contact_email"),
+  contactInstagramUrl: text("contact_instagram_url"),
+  contactInstagramHandle: text("contact_instagram_handle"),
+  contactIntro: text("contact_intro"),
+  aboutPortrait: text("about_portrait"),
+  aboutBio: text("about_bio"),
+  aboutExhibitions: text("about_exhibitions"),
+  availableHeading: text("available_heading"),
+  availableIntro: text("available_intro"),
+  heroTitle: text("hero_title"),
+  heroSubtitle: text("hero_subtitle"),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Archivo_Narrow, Hanken_Grotesk } from "next/font/google";
 import { Sidebar } from "@/components/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
+import { getSiteContent } from "@/lib/data";
 import "./globals.css";
 
 const archivo = Archivo_Narrow({
@@ -26,16 +27,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const site = await getSiteContent();
   return (
     <html lang="en" suppressHydrationWarning className={`${archivo.variable} ${hanken.variable}`}>
-      <body className="bg-background font-body text-on-background antialiased min-h-screen">
+      <body className="bg-background font-body text-on-surface antialiased min-h-screen">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-          <Sidebar />
+          <Sidebar
+            contactEmail={site.contactEmail}
+            contactInstagramUrl={site.contactInstagramUrl}
+          />
           <div className="pt-16 lg:pt-0 lg:ml-[248px] min-h-screen flex flex-col">
             <main className="flex-1">{children}</main>
           </div>
