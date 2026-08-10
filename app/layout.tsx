@@ -36,7 +36,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${archivo.variable} ${hanken.variable}`}>
       <body className="bg-background font-body text-on-surface antialiased min-h-screen">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <Sidebar
             contactEmail={site.contactEmail}
             contactInstagramUrl={site.contactInstagramUrl}

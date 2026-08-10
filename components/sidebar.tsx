@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
 
 const NAV = [
@@ -21,12 +23,18 @@ export function Sidebar({
   contactInstagramUrl: string | null;
 }) {
   const path = usePathname();
+  const [open, setOpen] = useState(false);
   const isActive = (href: string) =>
     path === href || (!!path && path !== "/" && path.startsWith(href));
 
+  // Close the mobile menu whenever the route changes.
+  useEffect(() => {
+    setOpen(false);
+  }, [path]);
+
   return (
-    <aside className="fixed top-0 left-0 z-50 w-full h-16 lg:h-screen lg:w-[248px] bg-background/90 backdrop-blur-md border-b lg:border-b-0 lg:border-r border-structural-gray flex items-center lg:items-stretch justify-between lg:flex-col px-edge-margin-mobile lg:px-0">
-      {/* Name — one line */}
+    <aside className="fixed top-0 left-0 z-50 w-full h-16 lg:h-screen lg:w-[248px] bg-background/95 backdrop-blur-md border-b lg:border-b-0 lg:border-r border-structural-gray flex items-center justify-between lg:flex-col px-edge-margin-mobile lg:px-0">
+      {/* Brand */}
       <div className="lg:px-gutter lg:pt-gutter flex items-center lg:block">
         <Link href="/" className="block">
           <span className="font-display text-[18px] lg:text-[22px] leading-none tracking-tight text-primary whitespace-nowrap uppercase">
@@ -35,8 +43,8 @@ export function Sidebar({
         </Link>
       </div>
 
-      {/* Nav */}
-      <nav className="flex items-center gap-gutter lg:flex-col lg:items-stretch lg:gap-0 lg:px-gutter lg:mt-6 overflow-x-auto whitespace-nowrap">
+      {/* Desktop nav */}
+      <nav className="hidden lg:flex lg:flex-col lg:items-stretch lg:gap-0 lg:px-gutter lg:mt-6">
         {NAV.map((n) => (
           <Link
             key={n.href}
@@ -55,7 +63,7 @@ export function Sidebar({
         </div>
       </nav>
 
-      {/* Contact — bottom (desktop only) */}
+      {/* Desktop footer */}
       {(contactEmail || contactInstagramUrl) && (
         <div className="hidden lg:block px-gutter lg:mt-auto lg:pb-gutter">
           <div className="border-t border-structural-gray pt-gutter space-y-1">
@@ -77,6 +85,41 @@ export function Sidebar({
                 Instagram
               </a>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* Mobile hamburger */}
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
+        className="lg:hidden text-on-surface-variant hover:text-primary p-2"
+      >
+        {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+      </button>
+
+      {/* Mobile drawer */}
+      {open && (
+        <div className="lg:hidden absolute top-16 inset-x-0 bg-background border-b border-structural-gray px-edge-margin-mobile py-gutter flex flex-col gap-gutter shadow-lg">
+          <nav className="flex flex-col gap-gutter">
+            {NAV.map((n) => (
+              <Link
+                key={n.href}
+                href={n.href}
+                className={`font-display text-label-caps uppercase transition-colors ${
+                  isActive(n.href)
+                    ? "text-primary font-bold"
+                    : "text-on-surface-variant hover:text-primary"
+                }`}
+              >
+                {n.label}
+              </Link>
+            ))}
+          </nav>
+          <div className="border-t border-structural-gray pt-gutter">
+            <ModeToggle />
           </div>
         </div>
       )}
