@@ -102,7 +102,7 @@ export function Sidebar({
 
       {/* Mobile drawer */}
       {open && (
-        <div className="lg:hidden absolute top-16 inset-x-0 bg-background border-b border-structural-gray px-edge-margin-mobile py-gutter flex flex-col gap-gutter shadow-lg">
+        <div className="lg:hidden fixed top-16 inset-x-0 max-h-[calc(100dvh-4rem)] overflow-y-auto bg-background border-b border-structural-gray px-edge-margin-mobile py-gutter flex flex-col gap-gutter shadow-lg">
           <nav className="flex flex-col gap-gutter">
             {NAV.map((n) => (
               <Link

@@ -223,7 +223,9 @@
   }
   body {
     overscroll-behavior: none;
-    overflow-x: hidden;
+    /* `clip` (not `hidden`) prevents horizontal scroll WITHOUT making <body> a
+       scroll container — `hidden` would break position: fixed on mobile. */
+    overflow-x: clip;
     @apply bg-background text-foreground;
   }
   * {
