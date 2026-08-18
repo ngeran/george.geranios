@@ -14,7 +14,9 @@ function str(v: FormDataEntryValue | null): string | null {
   return s.length ? s : null;
 }
 function int(v: FormDataEntryValue | null): number | null {
-  const n = Number(String(v ?? ""));
+  const s = String(v ?? "").trim();
+  if (!s) return null; // blank stays blank — Number("") is 0, not empty
+  const n = Number(s);
   return Number.isFinite(n) ? n : null;
 }
 function slugify(s: string): string {
