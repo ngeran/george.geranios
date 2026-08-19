@@ -205,6 +205,13 @@ export type SiteContent = {
   availableIntro: string | null;
   heroTitle: string | null;
   heroSubtitle: string | null;
+  navProjectsLabel: string | null;
+  navAvailableLabel: string | null;
+  navAboutLabel: string | null;
+  navContactLabel: string | null;
+  navShowPublications: boolean;
+  navShowNews: boolean;
+  projectCategories: string | null;
 };
 
 /** Default site-wide content. Mirrors the previously-hardcoded page literals so
@@ -225,4 +232,11 @@ export const seedSiteContent: SiteContent = {
     "For pricing, provenance, and condition reports, please contact the studio directly.",
   heroTitle: null,
   heroSubtitle: null,
+  navProjectsLabel: "Projects",
+  navAvailableLabel: "Available Works/Prints",
+  navAboutLabel: "Biography",
+  navContactLabel: "Contact",
+  navShowPublications: false,
+  navShowNews: false,
+  projectCategories: "Architecture\nLandscape\nMusic\nSeries",
 };

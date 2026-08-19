@@ -170,7 +170,22 @@ const asSiteContent = (r: typeof siteContent.$inferSelect): SiteContent => ({
   availableIntro: r.availableIntro ?? seedSiteContent.availableIntro,
   heroTitle: r.heroTitle ?? null,
   heroSubtitle: r.heroSubtitle ?? null,
+  navProjectsLabel: r.navProjectsLabel ?? seedSiteContent.navProjectsLabel,
+  navAvailableLabel: r.navAvailableLabel ?? seedSiteContent.navAvailableLabel,
+  navAboutLabel: r.navAboutLabel ?? seedSiteContent.navAboutLabel,
+  navContactLabel: r.navContactLabel ?? seedSiteContent.navContactLabel,
+  navShowPublications: r.navShowPublications ?? false,
+  navShowNews: r.navShowNews ?? false,
+  projectCategories: r.projectCategories ?? seedSiteContent.projectCategories,
 });
+
+/** Newline-separated list → trimmed, non-empty array (project categories). */
+export function parseCategoryList(s: string | null): string[] {
+  return (s ?? "")
+    .split("\n")
+    .map((x) => x.trim())
+    .filter(Boolean);
+}
 
 export async function getSiteContent(): Promise<SiteContent> {
   return readOrSeed(

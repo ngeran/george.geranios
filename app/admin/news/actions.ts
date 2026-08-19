@@ -19,7 +19,7 @@ function slugify(s: string): string {
 
 function parse(fd: FormData) {
   const title = str(fd.get("title")) ?? "";
-  const slug = str(fd.get("slug")) || slugify(title);
+  const slug = slugify(str(fd.get("slug")) || title);
   return {
     slug,
     title,

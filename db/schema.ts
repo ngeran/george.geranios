@@ -98,5 +98,12 @@ export const siteContent = pgTable("site_content", {
   availableIntro: text("available_intro"),
   heroTitle: text("hero_title"),
   heroSubtitle: text("hero_subtitle"),
+  navProjectsLabel: text("nav_projects_label"),
+  navAvailableLabel: text("nav_available_label"),
+  navAboutLabel: text("nav_about_label"),
+  navContactLabel: text("nav_contact_label"),
+  navShowPublications: boolean("nav_show_publications").default(false),
+  navShowNews: boolean("nav_show_news").default(false),
+  projectCategories: text("project_categories"),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

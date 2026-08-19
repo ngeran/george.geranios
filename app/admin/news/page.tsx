@@ -60,7 +60,7 @@ export default async function AdminNewsPage() {
                 )}
                 {db && n.id && (
                   <form action={deleteNews.bind(null, n.id as number)}>
-                    <Button size="sm" variant="outline">
+                    <Button type="submit" size="sm" variant="outline">
                       Delete
                     </Button>
                   </form>

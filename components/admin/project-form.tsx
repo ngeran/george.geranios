@@ -34,13 +34,18 @@ export type ProjectDefaults = {
 export function ProjectForm({
   action,
   defaults,
+  categories,
 }: {
   action: Action;
   defaults?: ProjectDefaults;
+  categories?: string[];
 }) {
   const [state, formAction] = useActionState(action, null);
   const error = (state as { error?: string } | null)?.error;
   const AVAIL = ["for-sale", "sold", "reserved", "not-for-sale"];
+  const cats = categories ?? [];
+  const currentCat = defaults?.category ?? "";
+  const extraCats = currentCat && !cats.includes(currentCat) ? [currentCat] : [];
 
   return (
     <form action={formAction} className="space-y-6 max-w-2xl">
@@ -65,8 +70,35 @@ export function ProjectForm({
 
       <Section title="Classification">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-gutter">
-          <Field label="Category">
-            <Input name="category" defaultValue={defaults?.category ?? ""} />
+          <Field
+            label="Category"
+            hint={
+              cats.length
+                ? "Options are defined in Site Content."
+                : "Free text — define options in Site Content."
+            }
+          >
+            {cats.length > 0 ? (
+              <select
+                name="category"
+                defaultValue={currentCat}
+                className="w-full bg-background border border-input h-10 px-3"
+              >
+                <option value="">—</option>
+                {extraCats.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+                {cats.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <Input name="category" defaultValue={currentCat} />
+            )}
           </Field>
           <Field label="Series">
             <Input name="series" defaultValue={defaults?.series ?? ""} />

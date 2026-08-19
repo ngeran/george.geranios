@@ -26,6 +26,13 @@ function parse(fd: FormData) {
     availableIntro: str(fd.get("availableIntro")),
     heroTitle: str(fd.get("heroTitle")),
     heroSubtitle: str(fd.get("heroSubtitle")),
+    navProjectsLabel: str(fd.get("navProjectsLabel")),
+    navAvailableLabel: str(fd.get("navAvailableLabel")),
+    navAboutLabel: str(fd.get("navAboutLabel")),
+    navContactLabel: str(fd.get("navContactLabel")),
+    navShowPublications: fd.get("navShowPublications") === "on",
+    navShowNews: fd.get("navShowNews") === "on",
+    projectCategories: str(fd.get("projectCategories")),
   };
 }
 

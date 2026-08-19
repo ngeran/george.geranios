@@ -62,7 +62,7 @@ export default async function AdminProjectsPage() {
                 )}
                 {db && p.id && (
                   <form action={deleteProject.bind(null, p.id as number)}>
-                    <Button size="sm" variant="outline">
+                    <Button type="submit" size="sm" variant="outline">
                       Delete
                     </Button>
                   </form>

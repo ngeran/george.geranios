@@ -40,6 +40,14 @@ export default async function RootLayout({
           <Sidebar
             contactEmail={site.contactEmail}
             contactInstagramUrl={site.contactInstagramUrl}
+            nav={{
+              projectsLabel: site.navProjectsLabel ?? "",
+              availableLabel: site.navAvailableLabel ?? "",
+              aboutLabel: site.navAboutLabel ?? "",
+              contactLabel: site.navContactLabel ?? "",
+              showPublications: !!site.navShowPublications,
+              showNews: !!site.navShowNews,
+            }}
           />
           <div className="pt-16 lg:pt-0 lg:ml-[248px] min-h-screen flex flex-col">
             <main className="flex-1">{children}</main>

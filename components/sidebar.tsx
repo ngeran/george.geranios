@@ -7,21 +7,33 @@ import { Menu, X } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { cn } from "@/lib/utils";
 
-const NAV = [
-  { href: "/projects", label: "Projects" },
-  { href: "/available", label: "Available Works/Prints" },
-  { href: "/about", label: "Biography" },
-  { href: "/contact", label: "Contact" },
-];
+export type NavConfig = {
+  projectsLabel: string;
+  availableLabel: string;
+  aboutLabel: string;
+  contactLabel: string;
+  showPublications: boolean;
+  showNews: boolean;
+};
 
 export function Sidebar({
   contactEmail,
   contactInstagramUrl,
+  nav,
 }: {
   contactEmail: string | null;
   contactInstagramUrl: string | null;
+  nav: NavConfig;
 }) {
   const path = usePathname();
+  const NAV = [
+    { href: "/projects", label: nav.projectsLabel || "Projects" },
+    { href: "/available", label: nav.availableLabel || "Available Works/Prints" },
+    ...(nav.showPublications ? [{ href: "/publications", label: "Publications" }] : []),
+    ...(nav.showNews ? [{ href: "/news", label: "News" }] : []),
+    { href: "/about", label: nav.aboutLabel || "Biography" },
+    { href: "/contact", label: nav.contactLabel || "Contact" },
+  ];
   const [open, setOpen] = useState(false);
   const isActive = (href: string) =>
     path === href || (!!path && path !== "/" && path.startsWith(href));
