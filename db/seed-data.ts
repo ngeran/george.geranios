@@ -212,6 +212,7 @@ export type SiteContent = {
   navShowPublications: boolean;
   navShowNews: boolean;
   projectCategories: string | null;
+  navExtraLinks: string | null;
 };
 
 /** Default site-wide content. Mirrors the previously-hardcoded page literals so
@@ -239,4 +240,5 @@ export const seedSiteContent: SiteContent = {
   navShowPublications: false,
   navShowNews: false,
   projectCategories: "Architecture\nLandscape\nMusic\nSeries",
+  navExtraLinks: null,
 };

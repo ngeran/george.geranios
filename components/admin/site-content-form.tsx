@@ -119,6 +119,17 @@ export function SiteContentForm({
           />
           <span className="text-sm">Show News in the menu</span>
         </label>
+        <Field
+          label="Extra links"
+          hint="One per line — Label | destination. Use /path for a site page or https://… for an external link. Shown at the end of the menu."
+        >
+          <Textarea
+            name="navExtraLinks"
+            rows={3}
+            defaultValue={defaults.navExtraLinks ?? ""}
+            placeholder={"Press | https://example.com\nCV | /cv"}
+          />
+        </Field>
       </Section>
 
       <Section

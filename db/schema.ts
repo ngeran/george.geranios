@@ -105,5 +105,6 @@ export const siteContent = pgTable("site_content", {
   navShowPublications: boolean("nav_show_publications").default(false),
   navShowNews: boolean("nav_show_news").default(false),
   projectCategories: text("project_categories"),
+  navExtraLinks: text("nav_extra_links"),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

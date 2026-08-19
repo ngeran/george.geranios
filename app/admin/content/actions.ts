@@ -33,6 +33,7 @@ function parse(fd: FormData) {
     navShowPublications: fd.get("navShowPublications") === "on",
     navShowNews: fd.get("navShowNews") === "on",
     projectCategories: str(fd.get("projectCategories")),
+    navExtraLinks: str(fd.get("navExtraLinks")),
   };
 }
 

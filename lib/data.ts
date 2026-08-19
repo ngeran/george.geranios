@@ -177,6 +177,7 @@ const asSiteContent = (r: typeof siteContent.$inferSelect): SiteContent => ({
   navShowPublications: r.navShowPublications ?? false,
   navShowNews: r.navShowNews ?? false,
   projectCategories: r.projectCategories ?? seedSiteContent.projectCategories,
+  navExtraLinks: r.navExtraLinks ?? seedSiteContent.navExtraLinks,
 });
 
 /** Newline-separated list → trimmed, non-empty array (project categories). */
@@ -185,6 +186,21 @@ export function parseCategoryList(s: string | null): string[] {
     .split("\n")
     .map((x) => x.trim())
     .filter(Boolean);
+}
+
+export type NavLink = { label: string; href: string };
+
+/** Extra nav links, one per line as `Label | /path` or `Label | https://…`. */
+export function parseNavLinks(s: string | null): NavLink[] {
+  return (s ?? "")
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [label, href] = line.split("|").map((p) => p.trim());
+      return label && href ? { label, href } : null;
+    })
+    .filter((x): x is NavLink => x !== null);
 }
 
 export async function getSiteContent(): Promise<SiteContent> {

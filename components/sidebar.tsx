@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { ModeToggle } from "@/components/mode-toggle";
 import { cn } from "@/lib/utils";
+import type { NavLink } from "@/lib/data";
 
 export type NavConfig = {
   projectsLabel: string;
@@ -20,23 +21,31 @@ export function Sidebar({
   contactEmail,
   contactInstagramUrl,
   nav,
+  extraLinks = [],
 }: {
   contactEmail: string | null;
   contactInstagramUrl: string | null;
   nav: NavConfig;
+  extraLinks?: NavLink[];
 }) {
   const path = usePathname();
-  const NAV = [
+  const [open, setOpen] = useState(false);
+  const isActive = (href: string) =>
+    path === href || (!!path && path !== "/" && path.startsWith(href));
+
+  const NAV: { href: string; label: string; external?: boolean }[] = [
     { href: "/projects", label: nav.projectsLabel || "Projects" },
     { href: "/available", label: nav.availableLabel || "Available Works/Prints" },
     ...(nav.showPublications ? [{ href: "/publications", label: "Publications" }] : []),
     ...(nav.showNews ? [{ href: "/news", label: "News" }] : []),
     { href: "/about", label: nav.aboutLabel || "Biography" },
     { href: "/contact", label: nav.contactLabel || "Contact" },
+    ...extraLinks.map((l) => ({
+      href: l.href,
+      label: l.label,
+      external: !l.href.startsWith("/"),
+    })),
   ];
-  const [open, setOpen] = useState(false);
-  const isActive = (href: string) =>
-    path === href || (!!path && path !== "/" && path.startsWith(href));
 
   // Close on route change.
   useEffect(() => {
@@ -53,6 +62,13 @@ export function Sidebar({
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  const linkCls = (href: string, extra: string) =>
+    cn(
+      "font-display uppercase transition-colors",
+      extra,
+      isActive(href) ? "text-primary font-bold" : "text-on-surface-variant hover:text-primary",
+    );
+
   return (
     <>
       {/* ===== Top bar (mobile) / sidebar (desktop) ===== */}
@@ -68,20 +84,27 @@ export function Sidebar({
 
         {/* Desktop nav */}
         <nav className="hidden lg:flex lg:flex-col lg:items-stretch lg:gap-0 lg:px-gutter lg:mt-6">
-          {NAV.map((n) => (
-            <Link
-              key={n.href}
-              href={n.href}
-              className={cn(
-                "font-display text-label-caps uppercase whitespace-nowrap transition-colors lg:py-2",
-                isActive(n.href)
-                  ? "text-primary font-bold"
-                  : "text-on-surface-variant hover:text-primary",
-              )}
-            >
-              {n.label}
-            </Link>
-          ))}
+          {NAV.map((n) =>
+            n.external ? (
+              <a
+                key={n.href}
+                href={n.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={linkCls(n.href, "text-label-caps whitespace-nowrap lg:py-2")}
+              >
+                {n.label}
+              </a>
+            ) : (
+              <Link
+                key={n.href}
+                href={n.href}
+                className={linkCls(n.href, "text-label-caps whitespace-nowrap lg:py-2")}
+              >
+                {n.label}
+              </Link>
+            ),
+          )}
           <div className="lg:py-2 lg:self-start">
             <ModeToggle />
           </div>
@@ -152,19 +175,38 @@ export function Sidebar({
 
         {/* Nav links */}
         <nav className="flex-1 flex flex-col justify-center gap-gutter px-edge-margin-mobile">
-          {NAV.map((n) => (
-            <Link
-              key={n.href}
-              href={n.href}
-              onClick={() => setOpen(false)}
-              className={cn(
-                "font-display text-2xl uppercase tracking-tight py-1 transition-colors",
-                isActive(n.href) ? "text-primary" : "text-on-surface-variant hover:text-primary",
-              )}
-            >
-              {n.label}
-            </Link>
-          ))}
+          {NAV.map((n) =>
+            n.external ? (
+              <a
+                key={n.href}
+                href={n.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(
+                  "font-display text-2xl uppercase tracking-tight py-1 transition-colors",
+                  isActive(n.href)
+                    ? "text-primary"
+                    : "text-on-surface-variant hover:text-primary",
+                )}
+              >
+                {n.label}
+              </a>
+            ) : (
+              <Link
+                key={n.href}
+                href={n.href}
+                onClick={() => setOpen(false)}
+                className={cn(
+                  "font-display text-2xl uppercase tracking-tight py-1 transition-colors",
+                  isActive(n.href)
+                    ? "text-primary"
+                    : "text-on-surface-variant hover:text-primary",
+                )}
+              >
+                {n.label}
+              </Link>
+            ),
+          )}
         </nav>
 
         {/* Footer: theme + contact */}

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Archivo_Narrow, Hanken_Grotesk } from "next/font/google";
 import { Sidebar } from "@/components/sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
-import { getSiteContent } from "@/lib/data";
+import { getSiteContent, parseNavLinks } from "@/lib/data";
 import "./globals.css";
 
 const archivo = Archivo_Narrow({
@@ -48,6 +48,7 @@ export default async function RootLayout({
               showPublications: !!site.navShowPublications,
               showNews: !!site.navShowNews,
             }}
+            extraLinks={parseNavLinks(site.navExtraLinks)}
           />
           <div className="pt-16 lg:pt-0 lg:ml-[248px] min-h-screen flex flex-col">
             <main className="flex-1">{children}</main>
